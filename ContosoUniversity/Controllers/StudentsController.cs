@@ -94,41 +94,6 @@ namespace ContosoUniversity.Controllers
             return View(student);
         }
 
-        // POST: Students/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost, ActionName("Edit")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> EditPost(int? id, [Bind("LastName,FirstMidName,EnrollmentDate")] Student student)
-        //{
-        //    if (id != student.ID)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(student);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!StudentExists(student.ID))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(student);
-        //}
-
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPost(int? id)
@@ -201,6 +166,7 @@ namespace ContosoUniversity.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            //  Reads data first, then deletes.
             var student = await _context.Students.FindAsync(id);
             if (student == null)
             {
@@ -208,6 +174,8 @@ namespace ContosoUniversity.Controllers
             }
             try
             {
+
+                //  Note that this method does NOT do a cascade delete.
                 _context.Students.Remove(student);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
