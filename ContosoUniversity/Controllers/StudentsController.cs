@@ -202,9 +202,20 @@ namespace ContosoUniversity.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var student = await _context.Students.FindAsync(id);
-            _context.Students.Remove(student);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (student == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            try
+            {
+                _context.Students.Remove(student);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
+            }
         }
 
         private bool StudentExists(int id)
